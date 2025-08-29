@@ -1,0 +1,52 @@
+{
+    "users": [
+        {
+            "id": 400066700667781151,
+            "name": "Manudrel",
+            "role": "Developer",
+            "permissions": [],
+            "mood": "good",
+            "trustable": true
+        },
+        {
+            "id": 475838503016595486,
+            "name": "Dannylo",
+            "role": "Tester",
+            "permissions": [],
+            "mood": "bad",
+            "trustable": true
+        },
+        {
+            "id": 820698480997302313,
+            "name": "Emanuel II",
+            "role": "Tester",
+            "permissions": [],
+            "mood": "good",
+            "trustable": true
+        },
+        {
+            "id": 399197938330501120,
+            "name": "Erich",
+            "role": "Tester",
+            "permissions": [],
+            "mood": "good",
+            "trustable": true
+        },
+        {
+            "id": 679783021687078938,
+            "name": "Rique",
+            "role": "User",
+            "permissions": [],
+            "mood": "bad",
+            "trustable": true
+        },
+        {
+            "id": 400310282225844236,
+            "name": "Marquin",
+            "role": "User",
+            "permissions": [],
+            "mood": "neutral",
+            "trustable": true
+        }
+    ]
+}
