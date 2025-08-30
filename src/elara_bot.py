@@ -1,11 +1,13 @@
+import os
+
+import discord
+from dotenv import load_dotenv
+from discord.ext import commands
+
 from services.logger import logger, discord_logger
 from groq_client import get_response, process_message
 from services.user_manager import *
-from dotenv import load_dotenv
-from discord.ext import commands
-import discord
-import os
-
+from services.context_manager import ContextManager
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
@@ -21,16 +23,7 @@ commands_list = ["!help"]
 
 elara = commands.Bot(command_prefix = '!', intents=intents, help_command=None)
 
-context_window = []
-
-def update_context(message: str, username: str, ctx_window: list, max_size: int = 20) -> None:
-    if len(ctx_window) >= max_size:
-        ctx_window.pop(0)
-        
-    ctx_window.append({
-        'role': 'user' if username != "Elara" else 'assistant',
-        'content': f'${username} says: $' + message,
-    })
+ctx_manager = ContextManager()
 
 @elara.event
 async def on_ready():
@@ -42,7 +35,6 @@ async def on_ready():
         
 @elara.event
 async def on_message(message: discord.Message) -> None:
-    global context_window
     
     '''Handle incoming messages and respond using Groq API.'''
     if message.author == elara.user:
@@ -60,10 +52,19 @@ async def on_message(message: discord.Message) -> None:
     discord_logger.info(f"[{message.author.name.upper()}]: {message.content}")
     
     # Update context with the incoming message
-    update_context(message.content, message.author.name, context_window)
+    ctx_window = ctx_manager.update_context(
+        user_id=message.author.id,
+        message=message.content,
+        username=message.author.name,
+        chat_id=message.channel.id  
+    )
     
     try:
-        response = await process_message(message.content, user_id=message.author.id, context_window=context_window)
+        response = await process_message(
+            prompt=message.content, 
+            user_id=message.author.id, 
+            context_window=ctx_window
+        )
         response = response.replace("$Elara says: $", "").strip()
     
     except Exception as e:
@@ -72,7 +73,13 @@ async def on_message(message: discord.Message) -> None:
         return
     
     # Update context with the response
-    update_context(response, "Elara", context_window)
+    ctx_manager.update_context(
+            user_id=message.author.id,
+            message=response,
+            username="Elara",
+            chat_id=message.channel.id
+        )
+    
     
     # Log the response
     discord_logger.info(f"[ELARA] send to [{message.author}]: {response[:80]}...")
