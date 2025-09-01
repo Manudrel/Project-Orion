@@ -6,11 +6,10 @@ import os
 os.makedirs("logs", exist_ok=True)
 log_files = len(os.listdir("logs"))
 
-log_index = 1 if (log_files == 0 or log_files == 1) else log_files
 
 # Configure the log handler to rotate daily
 log_handler = TimedRotatingFileHandler(
-    filename=f"logs/elara{log_index}.log",
+    filename=f"logs/elara.log",
     when="midnight",
     interval=1,
     backupCount=7,

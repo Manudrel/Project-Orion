@@ -1,6 +1,6 @@
 from services.logger import parser_logger, logger
 from services.user_manager import *
-from agents.command_parser import classify_and_extract, handle_role_change, handle_mood_change
+from agents.parser import classify_and_extract, handle_role_change, handle_mood_change
 from groq import Groq, APIConnectionError, APIStatusError
 from dotenv import load_dotenv
 import os

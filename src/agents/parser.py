@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from services import user_manager
 import os
 import json
-import re
+
 
 
 load_dotenv()
@@ -13,6 +13,11 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
+def safe_parse(response: str, message: str):
+    try:
+        return json.loads(response)
+    except Exception:
+        return {"intent": "chat", "extracted_data": {"chat": message}}
 
 def classify_and_extract(message: str) -> dict:
     """ Uses a mini LLM to classify intent and extract relevant info.
@@ -33,12 +38,14 @@ def classify_and_extract(message: str) -> dict:
                 {
                 "intent": "chat" | "role_change" | "mood_change" | "other_command",
                 "extracted_data": { ... }
+                "confidence": float (0.0 a 1.0)
                 }
-
+                Se não tiver certeza, use confiança baixa (<0.5).
+                
                 - Para SAUDAÇÕES e CONVERSA normal → "chat"
                 - Para role_change: extraia {"target_name": "...", "new_role": "..."}
                 - Para mood_change: extraia {"target_name": "...", "new_mood": "good"|"bad"|"neutral"}
-                - Para outras: {"raw": "mensagem original"}"""
+                - Para outras: {"chat": "mensagem original"}"""   
             },
             {"role": "user", "content": message}
         ],
@@ -49,7 +56,14 @@ def classify_and_extract(message: str) -> dict:
 
     try:
         response = completion.choices[0].message.content
-        return json.loads(response) if response else {"intent": "chat"}
+        result = safe_parse(response or "", message)
+
+        if result.get("confidence", 0) < 0.5:
+            print(result.get("confidence", 0))
+            result = {"intent": "chat", "extracted_data": {"chat": message}}
+        return result
+    
+        
     except Exception:
         return {"intent": "chat"}
 
@@ -68,6 +82,10 @@ def handle_role_change(new_role: str, requester_id: int, target_name: str | None
     """ 
     Handle role change requests. Either target_name or target_id must be provided.
     """
+    
+    if target_name is not None and target_name.lower() == 'você':
+        return f"Você não tem permissão para alterar o seu próprio cargo."
+        
     
     # First, if target_name looks like a mention, extract the ID
     if target_name:

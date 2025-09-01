@@ -1,0 +1,12 @@
+{
+    "users": [
+        {
+            "id": "12345",
+            "name": "CHANGE-ME",
+            "role": "Develop|Tester|User",
+            "permissions": [],
+            "mood": "good|bad|neutral",
+            "trustable": true|false
+        }
+    ]
+}
