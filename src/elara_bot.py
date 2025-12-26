@@ -35,7 +35,6 @@ async def on_ready():
         
 @elara.event
 async def on_message(message: discord.Message) -> None:
-    
     '''Handle incoming messages and respond using Groq API.'''
     if message.author == elara.user:
         return
@@ -83,7 +82,6 @@ async def on_message(message: discord.Message) -> None:
     
     # Log the response
     discord_logger.info(f"[ELARA] send to [{message.author}]: {response[:80]}...")
-    
     
     await message.channel.send(response)
 

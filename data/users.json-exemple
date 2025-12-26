@@ -3,7 +3,7 @@
         {
             "id": "12345",
             "name": "CHANGE-ME",
-            "role": "Develop|Tester|User",
+            "role": "Developer",
             "permissions": [],
             "mood": "good|bad|neutral",
             "trustable": true|false
