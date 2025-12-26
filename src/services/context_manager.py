@@ -7,12 +7,12 @@ class ContextManager:
     Context Manager by User and Chat
     """
 
-    def __init__(self, max_size: int = 20):
+    def __init__(self, max_size: int = 20) -> None:
         self.max_size = max_size
         self.contexts: Dict[str, List[Dict]] = {} 
         self.lock = threading.RLock()
         
-    def _get_key(self, user_id: int, chat_id: int | None = None):
+    def _get_key(self, user_id: int, chat_id: int | None = None) -> str:
         """
         Generate a unique key for each user
         """

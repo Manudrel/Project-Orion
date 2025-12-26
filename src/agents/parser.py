@@ -4,8 +4,6 @@ from services import user_manager
 import os
 import json
 
-
-
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY_PARSER")
 if not api_key:
@@ -49,7 +47,7 @@ def classify_and_extract(message: str) -> dict:
             },
             {"role": "user", "content": message}
         ],
-        temperature=0,
+        temperature=0.2,
         max_completion_tokens=150,
         response_format={"type": "json_object"}
     )
