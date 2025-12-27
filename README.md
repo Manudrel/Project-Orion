@@ -81,14 +81,9 @@ The project is constantly evolving. Features, agents, and integrations are being
 
 ## License
 
-This project is licensed under the **MIT License** (or another, if applicable).
+This project is licensed under the **MIT License**.
 
 ---
 
 *ORION & ELARA — Distributed, collaborative intelligence in constant evolution.*
 
-Se quiser, posso:
-
-* Ajustar o tom (mais técnico ou mais comercial)
-* Padronizar termos (agent, module, service)
-* Criar uma versão curta para a página inicial do GitHub
